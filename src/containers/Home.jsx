@@ -1,42 +1,44 @@
 import React, {useState, useEffect} from 'react';
-import Header from '../components/Header';
+import {connect} from 'react-redux'; // Nos ayudara a conectar nuestra aplicacion con react-redux
 import Search from '../components/Search';
 import Categories from '../components/Categories';
 import Carousel from '../components/Carousel';
 import CarouselItem from '../components/CarouselItem';
-import Footer from '../components/Footer';
 import useInitialState from '../hooks/useInitalSatate.js';
 import '../assets/styles/App.scss'; // poner extension para no confundir con componentes
 
-const API = 'http://localhost:3000/initalState';
+
+//const API = 'http://localhost:3000/initalState';
 
 
-const Home = () => {
+const Home = ({mylist, trends, originals}) => {
 	
-	const initialState = useInitialState(API);
+	//const initialState = useInitialState(API);
 
 	return(
 
 		<React.Fragment>
 			<Search/>
-			{initialState.mylist?.length > 0 && (
+			{mylist?.length > 0 && (
 				<Categories title='Mi lista'>
 					<Carousel>
-						<CarouselItem/>
+					{mylist.map(item=>
+						<CarouselItem key={item.id} {...item}/>
+					)}
 					</Carousel>
 				</Categories>)
 			}
 			
 			<Categories title = 'Tendencias'>
 				<Carousel>
-					{initialState.trends?.map(item => 
+					{trends?.map(item => 
 						<CarouselItem key={item.id} {...item} />
 					)}
 				</Carousel>
 			</Categories>
 			<Categories title = 'Originales de Platzi Video'>
 				<Carousel>
-				{initialState.originals?.map(item=>
+				{originals?.map(item=>
 					<CarouselItem key={item.id} {...item}/>
 				)}
 				</Carousel>
@@ -47,4 +49,19 @@ const Home = () => {
 
 }
 
-export default Home;
+const mapStateToProps = state => {//traer solo los elementos que necesitas
+	return {
+		mylist: state.mylist,
+		trends: state.trends,
+		originals: state.originals
+	}
+}
+
+//export default Home;
+export default connect(mapStateToProps, null)(Home)
+/*
+Connect recibe dos parametros:
+1. el mapeo de los (props)
+2. Nuestro dispath que vamos a disparar por medio de nuestros (actions)
+	2.1 si la aplicacion no lo tiene pasar valor nulo para que no se rompa
+ */
