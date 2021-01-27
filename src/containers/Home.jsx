@@ -11,14 +11,13 @@ import '../assets/styles/App.scss'; // poner extension para no confundir con com
 const API = 'http://localhost:3000/initalState';
 
 
-const App = () => {
+const Home = () => {
 	
 	const initialState = useInitialState(API);
 
 	return(
 
-		<div className='App'>
-			<Header/> 
+		<React.Fragment>
 			<Search/>
 			{initialState.mylist?.length > 0 && (
 				<Categories title='Mi lista'>
@@ -42,10 +41,10 @@ const App = () => {
 				)}
 				</Carousel>
 			</Categories>
-			<Footer/>
-		</div>
+		</React.Fragment>
 		);
+
 
 }
 
-export default App;
+export default Home;
