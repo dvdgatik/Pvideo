@@ -1,21 +1,26 @@
 import React from 'react';
 import {connect} from 'react-redux'; // importar la aplicacion para disponer el estado o de enviar valores nuestros ations
 import PropTypes from 'prop-types';
-import {setFavorite} from '../actions'; //index
+import {setFavorite, deleteFavorite} from '../actions'; //index
 import '../assets/styles/components/CarouselItem.scss';
 import playIcon from '../assets/static/play-icon.png';
 import plusIcon from '../assets/static/plus-icon.png';
+import removeIcon from '../assets/static/remove-icon_a56b8107-2c02-49ed-bead-308031b0dd76.png';
 
 const CarouselItem = (props) => {
   //logica
-  const {cover, title, year, contentRating, duration} = props;
+  const {id, cover, title, year, contentRating, duration} = props;
   //Crear funcion de guardado hacia favoritos
   const handleSetFavorite = () => {
       //Llamar al elemento mapeado que recibira un objeto con los elementos del props
      props.setFavorite({
-           cover, title, year, contentRating, duration
+           id, cover, title, year, contentRating, duration
          })
      }
+
+  const handleDeleteFavorite = (itemId) => {
+    props.deleteFavorite(itemId)
+  }
   
   return(
 	     <div className="carousel-item">
@@ -26,7 +31,14 @@ const CarouselItem = (props) => {
             <img className="carousel-item__details--img" 
                   src={plusIcon}
                   onClick={handleSetFavorite} 
-                  alt="Plus Icon"/> 
+                  alt="Plus Icon"
+             />
+             <img className='carousel-item__details--img' 
+             src={removeIcon}
+             onClick={() => handleDeleteFavorite(id)} 
+             alt='Delete Icon'
+
+             /> 
           </div>
           <p className="carousel-item__details--title">{title}</p>
           <p className="carousel-item__details--subtitle">
@@ -48,6 +60,7 @@ CarouselItem.propTypes = {
 
 const mapDispathToProps = {
  /**/ setFavorite,
+      deleteFavorite
 }
 //export default CarouselItem;
 export default connect(null, mapDispathToProps)(CarouselItem);
